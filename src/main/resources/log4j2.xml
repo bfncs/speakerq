@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="warn">
+    <Appenders>
+        <Console name="STDOUT" target="SYSTEM_OUT">
+            <PatternLayout>
+                <Pattern>%highlight{%d{HH:mm:ss,SSS/zzz}{CET} [%p] %logger{1.} - %msg%n%throwable}</Pattern>
+            </PatternLayout>
+        </Console>
+        <Async name="Async">
+            <AppenderRef ref="STDOUT" level="DEBUG"/>
+        </Async>
+    </Appenders>
+    <Loggers>
+        <Root level="DEBUG">
+            <AppenderRef ref="Async"/>
+        </Root>
+    </Loggers>
+</Configuration>
