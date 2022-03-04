@@ -1,0 +1,53 @@
+.wrapper {
+  color: #111;
+  background: #fbf5e8;
+  overflow: hidden;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.wrapper header,
+.wrapper main,
+.wrapper footer {
+  padding: 1em;
+}
+
+.wrapper header {
+  background: #a4d9d6;
+  text-align: center;
+  border-bottom: 1px solid #65cdc8;
+}
+
+.wrapper main {
+  display: flex;;
+  flex-direction: column;
+  justify-content: center;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.wrapper main h2 {
+  text-align: center;
+}
+.wrapper main input[type="text"] {
+  width: 100%;
+  margin: 0 0 .5em;
+  font-size: 2.5em;
+  text-align: center;
+}
+
+.wrapper footer input[type="submit"] {
+  width: 100%;
+  font-size: 2.5em;
+  padding: 0.5em;
+  background: #fdb35d;
+  border: none;
+  transition: background 0.3s;
+  cursor: pointer;
+}
+
+.wrapper footer input[type="submit"]:hover {
+  background: #e25a53;
+}

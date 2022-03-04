@@ -22153,20 +22153,91 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
 
   // src/Home.tsx
   var import_react2 = __toESM(require_react());
+
+  // esbuild-css-modules-plugin-namespace:/tmp/tmp-435275-XpUwQzlCJiKq/frontend/src/Home.module.css.js
+  var digest = "0a04d5fe93a3ee6162057780dcb230da37ec55295fdb7e0641c1d0f3bffe3b24";
+  var css = `._wrapper_1hulr_1 {
+  color: #111;
+  background: #fbf5e8;
+  overflow: hidden;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+._wrapper_1hulr_1 header,
+._wrapper_1hulr_1 main,
+._wrapper_1hulr_1 footer {
+  padding: 1em;
+}
+
+._wrapper_1hulr_1 header {
+  background: #a4d9d6;
+  text-align: center;
+  border-bottom: 1px solid #65cdc8;
+}
+
+._wrapper_1hulr_1 main {
+  display: flex;;
+  flex-direction: column;
+  justify-content: center;
+  flex: 1;
+  overflow-y: auto;
+}
+
+._wrapper_1hulr_1 main h2 {
+  text-align: center;
+}
+._wrapper_1hulr_1 main input[type="text"] {
+  width: 100%;
+  margin: 0 0 .5em;
+  font-size: 2.5em;
+  text-align: center;
+}
+
+._wrapper_1hulr_1 footer input[type="submit"] {
+  width: 100%;
+  font-size: 2.5em;
+  padding: 0.5em;
+  background: #fdb35d;
+  border: none;
+  transition: background 0.3s;
+  cursor: pointer;
+}
+
+._wrapper_1hulr_1 footer input[type="submit"]:hover {
+  background: #e25a53;
+}
+`;
+  (function() {
+    if (!document.getElementById(digest)) {
+      var el = document.createElement("style");
+      el.id = digest;
+      el.textContent = css;
+      document.head.appendChild(el);
+    }
+  })();
+  var Home_module_css_default = { "wrapper": "_wrapper_1hulr_1" };
+
+  // src/Home.tsx
   function Home(props) {
     const [roomId, setRoomId] = (0, import_react2.useState)("");
     const navigate2 = useNavigate();
-    return /* @__PURE__ */ import_react2.default.createElement("div", null, /* @__PURE__ */ import_react2.default.createElement("h1", null, "Hi, this is speakerq! \u{1F44B}"), /* @__PURE__ */ import_react2.default.createElement("form", {
+    return /* @__PURE__ */ import_react2.default.createElement("form", {
+      className: Home_module_css_default.wrapper,
       onSubmit: (event) => {
         event.preventDefault();
         return navigate2("/" + roomId);
       }
-    }, /* @__PURE__ */ import_react2.default.createElement("input", {
+    }, /* @__PURE__ */ import_react2.default.createElement("header", null, /* @__PURE__ */ import_react2.default.createElement("h1", null, "\u270B speakerq")), /* @__PURE__ */ import_react2.default.createElement("main", null, /* @__PURE__ */ import_react2.default.createElement("div", null, /* @__PURE__ */ import_react2.default.createElement("h2", null, "Create room"), /* @__PURE__ */ import_react2.default.createElement("input", {
       type: "text",
       value: roomId,
-      onChange: (e2) => setRoomId(e2.target.value)
-    }), /* @__PURE__ */ import_react2.default.createElement("input", {
-      type: "submit"
+      onChange: (e2) => setRoomId(e2.target.value),
+      autoFocus: true
+    }))), /* @__PURE__ */ import_react2.default.createElement("footer", null, /* @__PURE__ */ import_react2.default.createElement("input", {
+      type: "submit",
+      value: "Start"
     })));
   }
 
@@ -22226,9 +22297,9 @@ Length provided: ${this.length}. Number of dictionaries provided: ${this.diction
   var r = ["aardvark", "aardwolf", "albatross", "alligator", "alpaca", "amphibian", "anaconda", "angelfish", "anglerfish", "ant", "anteater", "antelope", "antlion", "ape", "aphid", "armadillo", "asp", "baboon", "badger", "bandicoot", "barnacle", "barracuda", "basilisk", "bass", "bat", "bear", "beaver", "bedbug", "bee", "beetle", "bird", "bison", "blackbird", "boa", "boar", "bobcat", "bobolink", "bonobo", "booby", "bovid", "bug", "butterfly", "buzzard", "camel", "canid", "canidae", "capybara", "cardinal", "caribou", "carp", "cat", "caterpillar", "catfish", "catshark", "cattle", "centipede", "cephalopod", "chameleon", "cheetah", "chickadee", "chicken", "chimpanzee", "chinchilla", "chipmunk", "cicada", "clam", "clownfish", "cobra", "cockroach", "cod", "condor", "constrictor", "coral", "cougar", "cow", "coyote", "crab", "crane", "crawdad", "crayfish", "cricket", "crocodile", "crow", "cuckoo", "damselfly", "deer", "dingo", "dinosaur", "dog", "dolphin", "donkey", "dormouse", "dove", "dragon", "dragonfly", "duck", "eagle", "earthworm", "earwig", "echidna", "eel", "egret", "elephant", "elk", "emu", "ermine", "falcon", "felidae", "ferret", "finch", "firefly", "fish", "flamingo", "flea", "fly", "flyingfish", "fowl", "fox", "frog", "galliform", "gamefowl", "gayal", "gazelle", "gecko", "gerbil", "gibbon", "giraffe", "goat", "goldfish", "goose", "gopher", "gorilla", "grasshopper", "grouse", "guan", "guanaco", "guineafowl", "gull", "guppy", "haddock", "halibut", "hamster", "hare", "harrier", "hawk", "hedgehog", "heron", "herring", "hippopotamus", "hookworm", "hornet", "horse", "hoverfly", "hummingbird", "hyena", "iguana", "impala", "jackal", "jaguar", "jay", "jellyfish", "junglefowl", "kangaroo", "kingfisher", "kite", "kiwi", "koala", "koi", "krill", "ladybug", "lamprey", "landfowl", "lark", "leech", "lemming", "lemur", "leopard", "leopon", "limpet", "lion", "lizard", "llama", "lobster", "locust", "loon", "louse", "lungfish", "lynx", "macaw", "mackerel", "magpie", "mammal", "manatee", "mandrill", "marlin", "marmoset", "marmot", "marsupial", "marten", "mastodon", "meadowlark", "meerkat", "mink", "minnow", "mite", "mockingbird", "mole", "mollusk", "mongoose", "monkey", "moose", "mosquito", "moth", "mouse", "mule", "muskox", "narwhal", "newt", "nightingale", "ocelot", "octopus", "opossum", "orangutan", "orca", "ostrich", "otter", "owl", "ox", "panda", "panther", "parakeet", "parrot", "parrotfish", "partridge", "peacock", "peafowl", "pelican", "penguin", "perch", "pheasant", "pig", "pigeon", "pike", "pinniped", "piranha", "planarian", "platypus", "pony", "porcupine", "porpoise", "possum", "prawn", "primate", "ptarmigan", "puffin", "puma", "python", "quail", "quelea", "quokka", "rabbit", "raccoon", "rat", "rattlesnake", "raven", "reindeer", "reptile", "rhinoceros", "roadrunner", "rodent", "rook", "rooster", "roundworm", "sailfish", "salamander", "salmon", "sawfish", "scallop", "scorpion", "seahorse", "shark", "sheep", "shrew", "shrimp", "silkworm", "silverfish", "skink", "skunk", "sloth", "slug", "smelt", "snail", "snake", "snipe", "sole", "sparrow", "spider", "spoonbill", "squid", "squirrel", "starfish", "stingray", "stoat", "stork", "sturgeon", "swallow", "swan", "swift", "swordfish", "swordtail", "tahr", "takin", "tapir", "tarantula", "tarsier", "termite", "tern", "thrush", "tick", "tiger", "tiglon", "toad", "tortoise", "toucan", "trout", "tuna", "turkey", "turtle", "tyrannosaurus", "unicorn", "urial", "vicuna", "viper", "vole", "vulture", "wallaby", "walrus", "warbler", "wasp", "weasel", "whale", "whippet", "whitefish", "wildcat", "wildebeest", "wildfowl", "wolf", "wolverine", "wombat", "woodpecker", "worm", "wren", "xerinae", "yak", "zebra"];
   var t = ["amaranth", "amber", "amethyst", "apricot", "aqua", "aquamarine", "azure", "beige", "black", "blue", "blush", "bronze", "brown", "chocolate", "coffee", "copper", "coral", "crimson", "cyan", "emerald", "fuchsia", "gold", "gray", "green", "harlequin", "indigo", "ivory", "jade", "lavender", "lime", "magenta", "maroon", "moccasin", "olive", "orange", "peach", "pink", "plum", "purple", "red", "rose", "salmon", "sapphire", "scarlet", "silver", "tan", "teal", "tomato", "turquoise", "violet", "white", "yellow"];
 
-  // esbuild-css-modules-plugin-namespace:/tmp/tmp-427876-F13m3QPB5CYA/frontend/src/Room.module.css.js
-  var digest = "1171337db073222e59148525a3b9eaaeebde3017fa187581d81dd43fbee008ab";
-  var css = `._wrapper_ljga6_1 {
+  // esbuild-css-modules-plugin-namespace:/tmp/tmp-435275-XpUwQzlCJiKq/frontend/src/Room.module.css.js
+  var digest2 = "3c23d1033c5088f8e7026c87f46fed81984bc6733667b8dbf49846e89af22539";
+  var css2 = `._wrapper_ljga6_1 {
   color: #111;
   background: #fbf5e8;
   overflow: hidden;
@@ -22351,10 +22422,10 @@ Length provided: ${this.length}. Number of dictionaries provided: ${this.diction
 }
 `;
   (function() {
-    if (!document.getElementById(digest)) {
+    if (!document.getElementById(digest2)) {
       var el = document.createElement("style");
-      el.id = digest;
-      el.textContent = css;
+      el.id = digest2;
+      el.textContent = css2;
       document.head.appendChild(el);
     }
   })();

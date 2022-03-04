@@ -1,26 +1,36 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 
-import { RouteComponentProps, useNavigate } from "@reach/router";
+import {RouteComponentProps, useNavigate} from "@reach/router";
+import styles from "Home.module.css";
 
 export function Home(props: RouteComponentProps) {
-  const [roomId, setRoomId] = useState("");
-  const navigate = useNavigate();
-  return (
-    <div>
-      <h1>Hi, this is speakerq! 👋</h1>
-      <form
-        onSubmit={(event) => {
-          event.preventDefault();
-          return navigate("/" + roomId);
-        }}
-      >
-        <input
-          type="text"
-          value={roomId}
-          onChange={(e) => setRoomId(e.target.value)}
-        />
-        <input type="submit" />
-      </form>
-    </div>
-  );
-}
+    const [roomId, setRoomId] = useState("");
+    const navigate = useNavigate();
+    return (
+        <form
+            className={styles.wrapper}
+            onSubmit={(event) => {
+                event.preventDefault();
+                return navigate("/" + roomId);
+            }}
+        >
+                <header>
+                    <h1>✋ speakerq</h1>
+                </header>
+                <main>
+                    <div>
+                        <h2>Create room</h2>
+                        <input
+                            type="text"
+                            value={roomId}
+                            onChange={(e) => setRoomId(e.target.value)}
+                            autoFocus={true}
+                        />
+                    </div>
+                </main>
+                <footer>
+                    <input type="submit" value="Start"/>
+                </footer>
+        </form>
+    )
+};
