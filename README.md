@@ -30,3 +30,10 @@ Start the backend application to load directly from the frontend folder by setti
 ```shell
 DEVELOPMENT=true java --enable-preview -jar target/speakerq-1.0-SNAPSHOT-fat.jar
 ```
+
+# TODO
+
+* ☐ Allow changing user name (and store locally)
+* ☐ Add JSON API for room state
+* ☐ Add plain text API for embedded devices
+* ☐ Add notification sounds
