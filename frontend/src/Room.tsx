@@ -6,6 +6,7 @@ import {
   colors,
   animals,
 } from "unique-names-generator";
+import styles from "Room.module.css";
 
 const initialName = uniqueNamesGenerator({
   dictionaries: [colors, adjectives, animals],
@@ -45,17 +46,14 @@ export function Room(props: RouteComponentProps<{ roomId: string }>) {
   const [socket, setSocket] = useState<WebSocket | null>(null);
   useEffect(() => {
     const ws = new WebSocket(
-      `${window.location.protocol === "https:" ? "wss" : "ws"}://${window.location.host}/api/rooms/${props.roomId}/ws`
+      `${window.location.protocol === "https:" ? "wss" : "ws"}://${
+        window.location.host
+      }/api/rooms/${props.roomId}/ws`
     );
     setSocket(ws);
 
     ws.addEventListener("open", (msg) => {
-      console.log("Event listener open");
       ws.send(JSON.stringify({ type: "SET_NAME", name: initialName }));
-    });
-
-    ws.addEventListener("close", (msg) => {
-      console.log("Event listener closed");
     });
 
     ws.addEventListener("message", (msg) => {
@@ -91,41 +89,70 @@ export function Room(props: RouteComponentProps<{ roomId: string }>) {
   if (!myParticipantId) return <div>Connecting</div>;
   const myHandIsRaised = room.raisedHands.includes(myParticipantId);
 
+  const hasRaisedHands = room.raisedHands.length > 0;
+  console.log({ hasRaisedHands, raisedHands: room.raisedHands });
   return (
-    <div>
-      <h1>
-        Room: {props.roomId}{" "}
-        <span title={room.participants.map((p) => p.name).join(", ")}>
-          ({room.participants.length})
-        </span>
-      </h1>
-
-      <h2>Raised hands</h2>
-      <ul>
-        {room.raisedHands
-          .flatMap((participantId) => {
-            const roomParticipant = room.participants.find(
-              (p) => p.id === participantId
-            );
-            return roomParticipant ? [roomParticipant] : [];
-          })
-          .map((roomParticipant) => (
-            <li key={roomParticipant.id}>{roomParticipant.name}</li>
-          ))}
-      </ul>
-
-      <button
-        onClick={() => {
-          if (!socket) return;
-          if (myHandIsRaised) {
-            socket.send(JSON.stringify({ type: "LOWER_HAND" }));
-          } else {
-            socket.send(JSON.stringify({ type: "RAISE_HAND" }));
-          }
-        }}
-      >
-        {myHandIsRaised ? "👇 Lower hand" : "✋ Raise hand"}
-      </button>
+    <div className={styles.wrapper}>
+      <header>
+        <h1 title={room.participants.map((p) => p.name).join(", ")}>
+          #{props.roomId}
+          {"{"}
+          {room.participants.length}
+          {"}"}
+        </h1>
+      </header>
+      <main>
+        <>
+          <div className={styles.handWrapper}>
+            <span
+              className={`${styles.hand} ${
+                hasRaisedHands ? styles.handAnimated : ""
+              }`}
+            >
+              <span className={styles.handInner}>✋</span>
+            </span>
+          </div>
+          <div className={styles.speakerList}>
+            {hasRaisedHands && (
+              <ol>
+                {room.raisedHands
+                  .flatMap((participantId) => {
+                    const roomParticipant = room.participants.find(
+                      (p) => p.id === participantId
+                    );
+                    return roomParticipant ? [roomParticipant] : [];
+                  })
+                  .map((roomParticipant) => (
+                    <li
+                      key={roomParticipant.id}
+                      className={
+                        roomParticipant.id === myParticipantId
+                          ? styles.speakerSelf
+                          : ""
+                      }
+                    >
+                      {roomParticipant.name}
+                    </li>
+                  ))}
+              </ol>
+            )}
+          </div>
+        </>
+      </main>
+      <footer>
+        <button
+          onClick={() => {
+            if (!socket) return;
+            if (myHandIsRaised) {
+              socket.send(JSON.stringify({ type: "LOWER_HAND" }));
+            } else {
+              socket.send(JSON.stringify({ type: "RAISE_HAND" }));
+            }
+          }}
+        >
+          {myHandIsRaised ? "Put hand down" : "Raise hand"}
+        </button>
+      </footer>
     </div>
   );
 }

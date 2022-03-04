@@ -22226,6 +22226,140 @@ Length provided: ${this.length}. Number of dictionaries provided: ${this.diction
   var r = ["aardvark", "aardwolf", "albatross", "alligator", "alpaca", "amphibian", "anaconda", "angelfish", "anglerfish", "ant", "anteater", "antelope", "antlion", "ape", "aphid", "armadillo", "asp", "baboon", "badger", "bandicoot", "barnacle", "barracuda", "basilisk", "bass", "bat", "bear", "beaver", "bedbug", "bee", "beetle", "bird", "bison", "blackbird", "boa", "boar", "bobcat", "bobolink", "bonobo", "booby", "bovid", "bug", "butterfly", "buzzard", "camel", "canid", "canidae", "capybara", "cardinal", "caribou", "carp", "cat", "caterpillar", "catfish", "catshark", "cattle", "centipede", "cephalopod", "chameleon", "cheetah", "chickadee", "chicken", "chimpanzee", "chinchilla", "chipmunk", "cicada", "clam", "clownfish", "cobra", "cockroach", "cod", "condor", "constrictor", "coral", "cougar", "cow", "coyote", "crab", "crane", "crawdad", "crayfish", "cricket", "crocodile", "crow", "cuckoo", "damselfly", "deer", "dingo", "dinosaur", "dog", "dolphin", "donkey", "dormouse", "dove", "dragon", "dragonfly", "duck", "eagle", "earthworm", "earwig", "echidna", "eel", "egret", "elephant", "elk", "emu", "ermine", "falcon", "felidae", "ferret", "finch", "firefly", "fish", "flamingo", "flea", "fly", "flyingfish", "fowl", "fox", "frog", "galliform", "gamefowl", "gayal", "gazelle", "gecko", "gerbil", "gibbon", "giraffe", "goat", "goldfish", "goose", "gopher", "gorilla", "grasshopper", "grouse", "guan", "guanaco", "guineafowl", "gull", "guppy", "haddock", "halibut", "hamster", "hare", "harrier", "hawk", "hedgehog", "heron", "herring", "hippopotamus", "hookworm", "hornet", "horse", "hoverfly", "hummingbird", "hyena", "iguana", "impala", "jackal", "jaguar", "jay", "jellyfish", "junglefowl", "kangaroo", "kingfisher", "kite", "kiwi", "koala", "koi", "krill", "ladybug", "lamprey", "landfowl", "lark", "leech", "lemming", "lemur", "leopard", "leopon", "limpet", "lion", "lizard", "llama", "lobster", "locust", "loon", "louse", "lungfish", "lynx", "macaw", "mackerel", "magpie", "mammal", "manatee", "mandrill", "marlin", "marmoset", "marmot", "marsupial", "marten", "mastodon", "meadowlark", "meerkat", "mink", "minnow", "mite", "mockingbird", "mole", "mollusk", "mongoose", "monkey", "moose", "mosquito", "moth", "mouse", "mule", "muskox", "narwhal", "newt", "nightingale", "ocelot", "octopus", "opossum", "orangutan", "orca", "ostrich", "otter", "owl", "ox", "panda", "panther", "parakeet", "parrot", "parrotfish", "partridge", "peacock", "peafowl", "pelican", "penguin", "perch", "pheasant", "pig", "pigeon", "pike", "pinniped", "piranha", "planarian", "platypus", "pony", "porcupine", "porpoise", "possum", "prawn", "primate", "ptarmigan", "puffin", "puma", "python", "quail", "quelea", "quokka", "rabbit", "raccoon", "rat", "rattlesnake", "raven", "reindeer", "reptile", "rhinoceros", "roadrunner", "rodent", "rook", "rooster", "roundworm", "sailfish", "salamander", "salmon", "sawfish", "scallop", "scorpion", "seahorse", "shark", "sheep", "shrew", "shrimp", "silkworm", "silverfish", "skink", "skunk", "sloth", "slug", "smelt", "snail", "snake", "snipe", "sole", "sparrow", "spider", "spoonbill", "squid", "squirrel", "starfish", "stingray", "stoat", "stork", "sturgeon", "swallow", "swan", "swift", "swordfish", "swordtail", "tahr", "takin", "tapir", "tarantula", "tarsier", "termite", "tern", "thrush", "tick", "tiger", "tiglon", "toad", "tortoise", "toucan", "trout", "tuna", "turkey", "turtle", "tyrannosaurus", "unicorn", "urial", "vicuna", "viper", "vole", "vulture", "wallaby", "walrus", "warbler", "wasp", "weasel", "whale", "whippet", "whitefish", "wildcat", "wildebeest", "wildfowl", "wolf", "wolverine", "wombat", "woodpecker", "worm", "wren", "xerinae", "yak", "zebra"];
   var t = ["amaranth", "amber", "amethyst", "apricot", "aqua", "aquamarine", "azure", "beige", "black", "blue", "blush", "bronze", "brown", "chocolate", "coffee", "copper", "coral", "crimson", "cyan", "emerald", "fuchsia", "gold", "gray", "green", "harlequin", "indigo", "ivory", "jade", "lavender", "lime", "magenta", "maroon", "moccasin", "olive", "orange", "peach", "pink", "plum", "purple", "red", "rose", "salmon", "sapphire", "scarlet", "silver", "tan", "teal", "tomato", "turquoise", "violet", "white", "yellow"];
 
+  // esbuild-css-modules-plugin-namespace:/tmp/tmp-427876-F13m3QPB5CYA/frontend/src/Room.module.css.js
+  var digest = "1171337db073222e59148525a3b9eaaeebde3017fa187581d81dd43fbee008ab";
+  var css = `._wrapper_ljga6_1 {
+  color: #111;
+  background: #fbf5e8;
+  overflow: hidden;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+._wrapper_ljga6_1 header,
+._wrapper_ljga6_1 main,
+._wrapper_ljga6_1 footer {
+  padding: 1em;
+}
+
+._wrapper_ljga6_1 header {
+  background: #a4d9d6;
+  text-align: center;
+  border-bottom: 1px solid #65cdc8;
+}
+
+._wrapper_ljga6_1 main {
+  display: flex;
+  flex: 1;
+  overflow-y: auto;
+}
+
+@media screen and (max-width: 540px) {
+  ._wrapper_ljga6_1 main {
+    flex-direction: column;
+  }
+}
+
+._wrapper_ljga6_1 footer button {
+  width: 100%;
+  font-size: 2.5em;
+  padding: 0.5em;
+  background: #fdb35d;
+  border: none;
+  transition: background 0.3s;
+  cursor: pointer;
+}
+
+._wrapper_ljga6_1 footer button:hover {
+  background: #e25a53;
+}
+
+._handWrapper_ljga6_48 {
+  font-size: 8em;
+  text-align: center;
+  min-width: 33%;
+  padding: 10px 0;
+}
+
+._hand_ljga6_48 {
+  position: relative;
+  display: inline-block;
+  transform-origin: bottom;
+}
+
+._hand_ljga6_48._handAnimated_ljga6_61 {
+  animation: _rotate_ljga6_1 3.5s infinite;
+}
+
+._hand_ljga6_48._handAnimated_ljga6_61:before {
+  content: "";
+  position: absolute;
+  display: block;
+  margin-top: -25%;
+  margin-left: -25%;
+  width: 150%;
+  height: 150%;
+  border-radius: 100%;
+  background-color: #fff;
+  animation: _pulse-ring_ljga6_1 1.25s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+}
+
+._handInner_ljga6_78 {
+  position: relative;
+  z-index: 999;
+}
+
+@keyframes _pulse-ring_ljga6_1 {
+  0% {
+    transform: scale(0.33);
+  }
+  80%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes _rotate_ljga6_1 {
+  0% {
+    transform: rotate(0deg);
+  }
+  10% {
+    transform: rotate(-10deg);
+  }
+  30% {
+    transform: rotate(10deg);
+  }
+  40% {
+    transform: rotate(0deg);
+  }
+}
+
+._speakerList_ljga6_108 {
+  font-size: 1.5em;
+  padding: 0 1em;
+}
+
+._speakerList_ljga6_108 ol {
+  padding: 0;
+  list-style-position: inside;
+  line-height: 1.5;
+}
+
+._speakerSelf_ljga6_119 {
+  font-weight: 700;
+}
+`;
+  (function() {
+    if (!document.getElementById(digest)) {
+      var el = document.createElement("style");
+      el.id = digest;
+      el.textContent = css;
+      document.head.appendChild(el);
+    }
+  })();
+  var Room_module_css_default = { "wrapper": "_wrapper_ljga6_1", "handWrapper": "_handWrapper_ljga6_48", "hand": "_hand_ljga6_48", "handAnimated": "_handAnimated_ljga6_61", "rotate": "_rotate_ljga6_1", "pulseRing": "_pulse-ring_ljga6_1", "handInner": "_handInner_ljga6_78", "speakerList": "_speakerList_ljga6_108", "speakerSelf": "_speakerSelf_ljga6_119" };
+
   // src/Room.tsx
   var initialName = n({
     dictionaries: [t, l, r],
@@ -22244,11 +22378,7 @@ Length provided: ${this.length}. Number of dictionaries provided: ${this.diction
       const ws = new WebSocket(`${window.location.protocol === "https:" ? "wss" : "ws"}://${window.location.host}/api/rooms/${props.roomId}/ws`);
       setSocket(ws);
       ws.addEventListener("open", (msg) => {
-        console.log("Event listener open");
         ws.send(JSON.stringify({ type: "SET_NAME", name: initialName }));
-      });
-      ws.addEventListener("close", (msg) => {
-        console.log("Event listener closed");
       });
       ws.addEventListener("message", (msg) => {
         try {
@@ -22277,14 +22407,27 @@ Length provided: ${this.length}. Number of dictionaries provided: ${this.diction
     if (!myParticipantId)
       return /* @__PURE__ */ import_react3.default.createElement("div", null, "Connecting");
     const myHandIsRaised = room.raisedHands.includes(myParticipantId);
-    return /* @__PURE__ */ import_react3.default.createElement("div", null, /* @__PURE__ */ import_react3.default.createElement("h1", null, "Room: ", props.roomId, " ", /* @__PURE__ */ import_react3.default.createElement("span", {
+    const hasRaisedHands = room.raisedHands.length > 0;
+    console.log({ hasRaisedHands, raisedHands: room.raisedHands });
+    return /* @__PURE__ */ import_react3.default.createElement("div", {
+      className: Room_module_css_default.wrapper
+    }, /* @__PURE__ */ import_react3.default.createElement("header", null, /* @__PURE__ */ import_react3.default.createElement("h1", {
       title: room.participants.map((p) => p.name).join(", ")
-    }, "(", room.participants.length, ")")), /* @__PURE__ */ import_react3.default.createElement("h2", null, "Raised hands"), /* @__PURE__ */ import_react3.default.createElement("ul", null, room.raisedHands.flatMap((participantId) => {
+    }, "#", props.roomId, "{", room.participants.length, "}")), /* @__PURE__ */ import_react3.default.createElement("main", null, /* @__PURE__ */ import_react3.default.createElement(import_react3.default.Fragment, null, /* @__PURE__ */ import_react3.default.createElement("div", {
+      className: Room_module_css_default.handWrapper
+    }, /* @__PURE__ */ import_react3.default.createElement("span", {
+      className: `${Room_module_css_default.hand} ${hasRaisedHands ? Room_module_css_default.handAnimated : ""}`
+    }, /* @__PURE__ */ import_react3.default.createElement("span", {
+      className: Room_module_css_default.handInner
+    }, "\u270B"))), /* @__PURE__ */ import_react3.default.createElement("div", {
+      className: Room_module_css_default.speakerList
+    }, hasRaisedHands && /* @__PURE__ */ import_react3.default.createElement("ol", null, room.raisedHands.flatMap((participantId) => {
       const roomParticipant = room.participants.find((p) => p.id === participantId);
       return roomParticipant ? [roomParticipant] : [];
     }).map((roomParticipant) => /* @__PURE__ */ import_react3.default.createElement("li", {
-      key: roomParticipant.id
-    }, roomParticipant.name))), /* @__PURE__ */ import_react3.default.createElement("button", {
+      key: roomParticipant.id,
+      className: roomParticipant.id === myParticipantId ? Room_module_css_default.speakerSelf : ""
+    }, roomParticipant.name)))))), /* @__PURE__ */ import_react3.default.createElement("footer", null, /* @__PURE__ */ import_react3.default.createElement("button", {
       onClick: () => {
         if (!socket)
           return;
@@ -22294,7 +22437,7 @@ Length provided: ${this.length}. Number of dictionaries provided: ${this.diction
           socket.send(JSON.stringify({ type: "RAISE_HAND" }));
         }
       }
-    }, myHandIsRaised ? "\u{1F447} Lower hand" : "\u270B Raise hand"));
+    }, myHandIsRaised ? "Put hand down" : "Raise hand")));
   }
 
   // src/index.tsx

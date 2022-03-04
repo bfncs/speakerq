@@ -42,6 +42,7 @@ public class Room {
                     LOG.info("Participant {} left", msg.participantId());
 
                     participants.remove(msg.participantId());
+                    raisedHands.remove(msg.participantId());
                     broadcastRoomStateUpdate(participants, raisedHands);
 
                     return participants.isEmpty() ? Behaviors.stopped() : Behaviors.same();
