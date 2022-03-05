@@ -9,7 +9,7 @@ public class Router {
   public static Behavior<Msg> create() {
     return Behaviors.receive(
         (ctx, msg) -> {
-          final String roomActorName = "room-" + msg.roomId();
+          final String roomActorName = ("room-" + msg.roomId()).replaceAll("[^-\\w]+", "");
           final ActorRef<Room.Msg> room =
               ctx.getChild(roomActorName)
                   .<ActorRef<Room.Msg>>map(ActorRef::unsafeUpcast)
