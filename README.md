@@ -31,9 +31,18 @@ Start the backend application to load directly from the frontend folder by setti
 DEVELOPMENT=true java --enable-preview -jar target/speakerq-1.0-SNAPSHOT-fat.jar
 ```
 
+# API
+
+## `GET /api/rooms/${roomId}`
+
+Fetch the current state of a room.
+
+## `GET /api/rooms/${roomId}/raisedHands`
+
+Fetch only the list of participants currently raising hands as array of participantIds.
+If you request this with header `Accept: text/plain` the response contains only the integer number of currently raised hands.
+
 # TODO
 
 * ☐ Allow changing user name (and store locally)
-* ☐ Add JSON API for room state
-* ☐ Add plain text API for embedded devices
 * ☐ Add notification sounds

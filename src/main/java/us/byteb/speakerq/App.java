@@ -8,12 +8,14 @@ import akka.actor.typed.ActorRef;
 import akka.actor.typed.ActorSystem;
 import akka.actor.typed.javadsl.ActorContext;
 import akka.actor.typed.javadsl.Adapter;
+import akka.actor.typed.javadsl.AskPattern;
 import akka.actor.typed.javadsl.Behaviors;
 import akka.http.javadsl.Http;
-import akka.http.javadsl.model.StatusCodes;
+import akka.http.javadsl.model.*;
 import akka.http.javadsl.model.ws.Message;
 import akka.http.javadsl.model.ws.TextMessage;
 import akka.http.javadsl.server.PathMatchers;
+import akka.http.javadsl.server.Route;
 import akka.japi.Pair;
 import akka.stream.OverflowStrategy;
 import akka.stream.javadsl.Flow;
@@ -21,6 +23,7 @@ import akka.stream.javadsl.Sink;
 import akka.stream.javadsl.Source;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.json.JsonMapper;
+import java.time.Duration;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletionStage;
@@ -34,6 +37,7 @@ public class App {
   private static final int PORT = Integer.parseInt(System.getenv().getOrDefault("PORT", "8080"));
   private static final boolean DEVELOPMENT = System.getenv("DEVELOPMENT") != null;
   private static final JsonMapper OBJECT_MAPPER = JsonMapper.builder().build();
+  private static final Duration ASK_TIMEOUT = Duration.ofSeconds(1);
 
   public static void main(String[] args) {
     LOG.info(
@@ -44,45 +48,93 @@ public class App {
             ctx -> {
               final ActorRef<Router.Msg> router = ctx.spawn(Router.create(), "router");
 
-              Http.get(ctx.getSystem())
-                  .newServerAt("0.0.0.0", PORT)
-                  .bind(
-                      concat(
-                          pathPrefix(
-                              "api",
-                              () ->
-                                  concat(
-                                      pathPrefix(
-                                          "rooms",
-                                          () ->
-                                              pathPrefix(
-                                                  PathMatchers.segment(),
-                                                  roomId ->
-                                                      concat(
-                                                          path(
-                                                              "ws",
-                                                              () ->
-                                                                  handleWebSocketMessages(
-                                                                      createWebsocketHandler(
-                                                                          roomId, ctx, router))),
-                                                          pathEnd(
-                                                              () ->
-                                                                  get(
-                                                                      () ->
-                                                                          complete(
-                                                                              "Welcome to room "
-                                                                                  + roomId)))))),
-                                      complete(StatusCodes.NOT_FOUND))),
-                          DEVELOPMENT
-                              ? getFromDirectory("frontend/public")
-                              : getFromResourceDirectory("public"),
-                          DEVELOPMENT
-                              ? getFromFile("frontend/public/index.html")
-                              : getFromResource("public/index.html")));
+              Http.get(ctx.getSystem()).newServerAt("0.0.0.0", PORT).bind(createRoute(ctx, router));
 
               return Behaviors.empty();
             }),
         "speakerq");
+  }
+
+  private static Route createRoute(
+      final ActorContext<Object> ctx, final ActorRef<Router.Msg> router) {
+    final Route apiRooms =
+        pathPrefix(
+            "rooms",
+            () ->
+                pathPrefix(
+                    PathMatchers.segment(),
+                    roomId ->
+                        concat(
+                            path(
+                                "ws",
+                                () ->
+                                    handleWebSocketMessages(
+                                        createWebsocketHandler(roomId, ctx, router))),
+                            path(
+                                "raisedHands",
+                                () ->
+                                    get(
+                                        () ->
+                                            optionalHeaderValueByName(
+                                                "Accept",
+                                                accept ->
+                                                    completeWithFuture(
+                                                        AskPattern
+                                                            .<Router.Msg, OutgoingMessage.RoomState>
+                                                                ask(
+                                                                    router,
+                                                                    ref ->
+                                                                        new Router.Msg(
+                                                                            roomId,
+                                                                            new Room.Msg
+                                                                                .GetRoomState(ref)),
+                                                                    ASK_TIMEOUT,
+                                                                    ctx.getSystem().scheduler())
+                                                            .thenApply(
+                                                                roomState -> {
+                                                                  if (accept
+                                                                      .map(
+                                                                          value ->
+                                                                              value
+                                                                                  .equalsIgnoreCase(
+                                                                                      "text/plain"))
+                                                                      .orElse(false)) {
+                                                                    return HttpResponse.create()
+                                                                        .withEntity(
+                                                                            String.valueOf(
+                                                                                roomState
+                                                                                    .raisedHands()
+                                                                                    .size()));
+                                                                  } else {
+                                                                    return jsonResponse(
+                                                                        roomState.raisedHands());
+                                                                  }
+                                                                }))))),
+                            pathEnd(
+                                () ->
+                                    get(
+                                        () ->
+                                            completeWithFuture(
+                                                AskPattern
+                                                    .<Router.Msg, OutgoingMessage.RoomState>ask(
+                                                        router,
+                                                        ref ->
+                                                            new Router.Msg(
+                                                                roomId,
+                                                                new Room.Msg.GetRoomState(ref)),
+                                                        ASK_TIMEOUT,
+                                                        ctx.getSystem().scheduler())
+                                                    .thenApply(
+                                                        roomState -> jsonResponse(roomState))))))));
+
+    final Route api = pathPrefix("api", () -> concat(apiRooms, complete(StatusCodes.NOT_FOUND)));
+
+    final Route frontend =
+        DEVELOPMENT
+            ? concat(getFromDirectory("frontend/public"), getFromFile("frontend/public/index.html"))
+            : concat(getFromResourceDirectory("public"), getFromResource("public/index.html"));
+
+    return concat(api, frontend);
   }
 
   private static Flow<Message, Message, NotUsed> createWebsocketHandler(
@@ -132,5 +184,14 @@ public class App {
             });
 
     return Flow.fromSinkAndSourceCoupled(materializedSink.second(), materializedSource.second());
+  }
+
+  private static HttpResponse jsonResponse(final Object payload) {
+    try {
+      return HttpResponse.create().withEntity(OBJECT_MAPPER.writeValueAsString(payload));
+    } catch (JsonProcessingException e) {
+      LOG.error("Unable to serialize response payload ({}): {}", payload, e.getMessage());
+      return HttpResponse.create().withStatus(StatusCodes.INTERNAL_SERVER_ERROR);
+    }
   }
 }

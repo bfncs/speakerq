@@ -74,11 +74,27 @@ public class Room {
 
                     return Behaviors.same();
                   })
+              .onMessage(
+                  Msg.GetRoomState.class,
+                  msg -> {
+                    msg.ref().tell(createRoomState(participants, raisedHands));
+                    return Behaviors.same();
+                  })
               .build();
         });
   }
 
   private static void broadcastRoomStateUpdate(
+      final Map<String, Participant> participants, final List<String> raisedHands) {
+    final OutgoingMessage.RoomStateUpdated msg =
+        new OutgoingMessage.RoomStateUpdated(createRoomState(participants, raisedHands));
+
+    for (final Participant p : participants.values()) {
+      p.receiver().tell(msg);
+    }
+  }
+
+  private static OutgoingMessage.RoomState createRoomState(
       final Map<String, Participant> participants, final List<String> raisedHands) {
     final List<OutgoingMessage.RoomParticipant> roomParticipants =
         participants.values().stream()
@@ -94,12 +110,7 @@ public class Room {
             .collect(Collectors.toList());
     final OutgoingMessage.RoomState roomState =
         new OutgoingMessage.RoomState(roomParticipants, raisedHands);
-    final OutgoingMessage.RoomStateUpdated outgoingMessage =
-        new OutgoingMessage.RoomStateUpdated(roomState);
-
-    for (final Participant p : participants.values()) {
-      p.receiver().tell(outgoingMessage);
-    }
+    return roomState;
   }
 
   public interface Msg {
@@ -109,5 +120,7 @@ public class Room {
     record ParticipantLeft(String participantId) implements Msg {}
 
     record ParticipantMessage(String participantId, IncomingMessage payload) implements Msg {}
+
+    record GetRoomState(ActorRef<OutgoingMessage.RoomState> ref) implements Msg {}
   }
 }
