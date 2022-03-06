@@ -1,19 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { RouteComponentProps } from "@reach/router";
-import {
-  uniqueNamesGenerator,
-  adjectives,
-  colors,
-  animals,
-} from "unique-names-generator";
 import styles from "Room.module.css";
-
-const initialName = uniqueNamesGenerator({
-  dictionaries: [colors, adjectives, animals],
-  style: "capital",
-  length: 2,
-  separator: "",
-});
+import { Settings } from "./Settings";
 
 type ParticipantId = string;
 
@@ -35,7 +23,15 @@ interface Joined {
 }
 type IncomingMessage = RoomStateUpdated | Joined;
 
-export function Room(props: RouteComponentProps<{ roomId: string }>) {
+export function Room(
+  props: RouteComponentProps<{
+    roomId: string;
+  }> & {
+    userName: string;
+    setUserName: (userName: string) => void;
+  }
+) {
+  const [isSettingsDialogOpen, setIsSettingsDialogOpen] = useState(false);
   const [myParticipantId, setMyParticipantId] = useState<ParticipantId | null>(
     null
   );
@@ -53,7 +49,7 @@ export function Room(props: RouteComponentProps<{ roomId: string }>) {
     setSocket(ws);
 
     ws.addEventListener("open", (msg) => {
-      ws.send(JSON.stringify({ type: "SET_NAME", name: initialName }));
+      ws.send(JSON.stringify({ type: "SET_NAME", name: props.userName }));
     });
 
     ws.addEventListener("message", (msg) => {
@@ -93,6 +89,19 @@ export function Room(props: RouteComponentProps<{ roomId: string }>) {
   console.log({ hasRaisedHands, raisedHands: room.raisedHands });
   return (
     <div className={styles.wrapper}>
+      <Settings
+        isOpen={isSettingsDialogOpen}
+        onClose={() => {
+          setIsSettingsDialogOpen(false);
+        }}
+        userName={props.userName}
+        setUserName={(userName) => {
+          if (socket) {
+            socket.send(JSON.stringify({ type: "SET_NAME", name: userName }));
+          }
+          props.setUserName(userName);
+        }}
+      />
       <header>
         <h1 title={room.participants.map((p) => p.name).join(", ")}>
           #{props.roomId}
@@ -100,6 +109,12 @@ export function Room(props: RouteComponentProps<{ roomId: string }>) {
           {room.participants.length}
           {"}"}
         </h1>
+        <button
+          className={styles.toggleSettings}
+          onClick={() => setIsSettingsDialogOpen(true)}
+        >
+          ⚙️
+        </button>
       </header>
       <main>
         <>

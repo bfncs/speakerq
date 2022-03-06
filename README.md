@@ -44,5 +44,4 @@ If you request this with header `Accept: text/plain` the response contains only 
 
 # TODO
 
-* ☐ Allow changing user name (and store locally)
 * ☐ Add notification sounds
