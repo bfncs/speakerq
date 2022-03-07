@@ -13,7 +13,7 @@ public class Router {
           final ActorRef<Room.Msg> room =
               ctx.getChild(roomActorName)
                   .<ActorRef<Room.Msg>>map(ActorRef::unsafeUpcast)
-                  .orElseGet(() -> ctx.spawn(Room.create(msg.roomId()), roomActorName));
+                  .orElseGet(() -> ctx.spawn(Room.create(), roomActorName));
 
           room.tell(msg.payload());
 

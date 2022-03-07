@@ -29,6 +29,10 @@ import java.util.UUID;
 import java.util.concurrent.CompletionStage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import us.byteb.speakerq.Room.Msg.GetRoomState;
+import us.byteb.speakerq.Room.Msg.ParticipantJoined;
+import us.byteb.speakerq.Room.Msg.ParticipantLeft;
+import us.byteb.speakerq.Room.Msg.ParticipantMessage;
 
 public class App {
 
@@ -79,17 +83,14 @@ public class App {
                                                 "Accept",
                                                 accept ->
                                                     completeWithFuture(
-                                                        AskPattern
-                                                            .<Router.Msg, OutgoingMessage.RoomState>
-                                                                ask(
-                                                                    router,
-                                                                    ref ->
-                                                                        new Router.Msg(
-                                                                            roomId,
-                                                                            new Room.Msg
-                                                                                .GetRoomState(ref)),
-                                                                    ASK_TIMEOUT,
-                                                                    ctx.getSystem().scheduler())
+                                                        AskPattern.<Router.Msg, RoomState>ask(
+                                                                router,
+                                                                ref ->
+                                                                    new Router.Msg(
+                                                                        roomId,
+                                                                        new GetRoomState(ref)),
+                                                                ASK_TIMEOUT,
+                                                                ctx.getSystem().scheduler())
                                                             .thenApply(
                                                                 roomState -> {
                                                                   if (accept
@@ -115,13 +116,11 @@ public class App {
                                     get(
                                         () ->
                                             completeWithFuture(
-                                                AskPattern
-                                                    .<Router.Msg, OutgoingMessage.RoomState>ask(
+                                                AskPattern.<Router.Msg, RoomState>ask(
                                                         router,
                                                         ref ->
                                                             new Router.Msg(
-                                                                roomId,
-                                                                new Room.Msg.GetRoomState(ref)),
+                                                                roomId, new GetRoomState(ref)),
                                                         ASK_TIMEOUT,
                                                         ctx.getSystem().scheduler())
                                                     .thenApply(
@@ -151,8 +150,7 @@ public class App {
     final String participantId = UUID.randomUUID().toString();
     final ActorRef<OutgoingMessage> participantReceiver =
         Adapter.toTyped(materializedSource.first());
-    router.tell(
-        new Router.Msg(roomId, new Room.Msg.ParticipantJoined(participantId, participantReceiver)));
+    router.tell(new Router.Msg(roomId, new ParticipantJoined(participantId, participantReceiver)));
 
     final Sink<Message, CompletionStage<Done>> sink =
         Sink.foreach(
@@ -168,8 +166,7 @@ public class App {
                 final IncomingMessage incomingMessage =
                     OBJECT_MAPPER.readValue(payload, IncomingMessage.class);
                 router.tell(
-                    new Router.Msg(
-                        roomId, new Room.Msg.ParticipantMessage(participantId, incomingMessage)));
+                    new Router.Msg(roomId, new ParticipantMessage(participantId, incomingMessage)));
               } catch (JsonProcessingException e) {
                 LOG.warn("Unable to parse incoming message ({}): {}", payload, e.getMessage());
               }
@@ -180,7 +177,7 @@ public class App {
         .first()
         .thenRun(
             () -> {
-              router.tell(new Router.Msg(roomId, new Room.Msg.ParticipantLeft(participantId)));
+              router.tell(new Router.Msg(roomId, new ParticipantLeft(participantId)));
             });
 
     return Flow.fromSinkAndSourceCoupled(materializedSink.second(), materializedSource.second());
