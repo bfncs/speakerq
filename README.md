@@ -44,4 +44,6 @@ If you request this with header `Accept: text/plain` the response contains only 
 
 # TODO
 
-* ☐ Add notification sounds
+* Add notification sounds
+* Make websocket disconnects visible in UI
+* Automatically reconnect to ws
