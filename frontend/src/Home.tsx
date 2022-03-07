@@ -23,7 +23,14 @@ export function Home(props: RouteComponentProps) {
           <input
             type="text"
             value={roomId}
-            onChange={(e) => setRoomId(e.target.value)}
+            onChange={(e) =>
+              setRoomId(
+                e.target.value
+                  .toLowerCase()
+                  .replaceAll(/\s+/g, "-")
+                  .replaceAll(/[^-\w]+/g, "")
+              )
+            }
             autoFocus={true}
             required={true}
           />
