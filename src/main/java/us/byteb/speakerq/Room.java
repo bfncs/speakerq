@@ -78,7 +78,7 @@ public class Room {
                   Msg.GetRoomState.class,
                   msg -> {
                     msg.ref().tell(createRoomState(participants, raisedHands));
-                    return Behaviors.same();
+                    return participants.isEmpty() ? Behaviors.stopped() : Behaviors.same();
                   })
               .build();
         });
