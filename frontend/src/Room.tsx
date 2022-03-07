@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { RouteComponentProps } from "@reach/router";
 import styles from "Room.module.css";
 import { Settings } from "./Settings";
+import notificationOgg from "./notification.ogg";
 
 type ParticipantId = string;
 
@@ -23,6 +24,17 @@ interface Joined {
 }
 type IncomingMessage = RoomStateUpdated | Joined;
 
+const notificationAudio = new Audio(notificationOgg);
+
+function wasNewHandRaised(room: RoomState, nextRoom: RoomState) {
+  for (const raisedHand of nextRoom.raisedHands) {
+    if (!room.raisedHands.includes(raisedHand)) {
+      return true;
+    }
+  }
+  return false;
+}
+
 export function Room(
   props: RouteComponentProps<{
     roomId: string;
@@ -39,20 +51,28 @@ export function Room(
     participants: [],
     raisedHands: [],
   });
-  const [socket, setSocket] = useState<WebSocket | null>(null);
+  const socket = useRef<WebSocket | null>(null);
   useEffect(() => {
     const ws = new WebSocket(
       `${window.location.protocol === "https:" ? "wss" : "ws"}://${
         window.location.host
       }/api/rooms/${props.roomId}/ws`
     );
-    setSocket(ws);
+    socket.current = ws;
 
-    ws.addEventListener("open", (msg) => {
+    ws.onopen = (msg) => {
       ws.send(JSON.stringify({ type: "SET_NAME", name: props.userName }));
-    });
+    };
 
-    ws.addEventListener("message", (msg) => {
+    return () => {
+      ws.close();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (socket.current == null) return;
+
+    socket.current.onmessage = (msg) => {
       try {
         const data = JSON.parse(msg.data);
         console.log("Received message", data);
@@ -70,17 +90,21 @@ export function Room(
             break;
           case "ROOM_STATE_UPDATED":
             console.log("Updating room state", data.room);
+            if (wasNewHandRaised(room, data.room)) {
+              notificationAudio
+                .play()
+                .catch((e) =>
+                  console.debug("Playing notification audio ignored", e)
+                );
+            }
+
             setRoomState(data.room);
         }
       } catch (e) {
         console.error("Ignoring invalid message: " + msg);
       }
-    });
-
-    return () => {
-      ws.close();
     };
-  }, []);
+  }, [room, setRoomState]);
 
   if (!myParticipantId) return <div>Connecting</div>;
   const myHandIsRaised = room.raisedHands.includes(myParticipantId);
@@ -96,8 +120,10 @@ export function Room(
         }}
         userName={props.userName}
         setUserName={(userName) => {
-          if (socket) {
-            socket.send(JSON.stringify({ type: "SET_NAME", name: userName }));
+          if (socket.current) {
+            socket.current.send(
+              JSON.stringify({ type: "SET_NAME", name: userName })
+            );
           }
           props.setUserName(userName);
         }}
@@ -157,11 +183,11 @@ export function Room(
       <footer>
         <button
           onClick={() => {
-            if (!socket) return;
+            if (!socket.current) return;
             if (myHandIsRaised) {
-              socket.send(JSON.stringify({ type: "LOWER_HAND" }));
+              socket.current.send(JSON.stringify({ type: "LOWER_HAND" }));
             } else {
-              socket.send(JSON.stringify({ type: "RAISE_HAND" }));
+              socket.current.send(JSON.stringify({ type: "RAISE_HAND" }));
             }
           }}
         >

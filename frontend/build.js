@@ -7,7 +7,7 @@ esbuild
     entryPoints: ["src/index.tsx"],
     bundle: true,
     outdir: "public",
-    loader: { ".png": "file" },
+    loader: { ".ogg": "file" },
     publicPath: "/",
     watch: process.argv[2] === "--watch",
     plugins: [cssModules()],
