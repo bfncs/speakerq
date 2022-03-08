@@ -35,14 +35,15 @@ function wasNewHandRaised(room: RoomState, nextRoom: RoomState) {
   return false;
 }
 
-export function Room(
-  props: RouteComponentProps<{
-    roomId: string;
-  }> & {
-    userName: string;
-    setUserName: (userName: string) => void;
-  }
-) {
+type routeProps = RouteComponentProps<{
+  roomId: string;
+}>;
+type ownProps = {
+  userName: string;
+  setUserName: (userName: string) => void;
+};
+
+export function Room(props: routeProps & ownProps) {
   const [isSettingsDialogOpen, setIsSettingsDialogOpen] = useState(false);
   const [myParticipantId, setMyParticipantId] = useState<ParticipantId | null>(
     null
