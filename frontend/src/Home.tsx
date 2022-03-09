@@ -35,6 +35,7 @@ export function Home(props: RouteComponentProps) {
             required={true}
           />
         </div>
+        <a href="https://github.com/bfncs/speakerq">src</a>
       </main>
       <footer>
         <input type="submit" value="Start" />
