@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { RouteComponentProps } from "@reach/router";
+import ReconnectingWebSocket from "reconnecting-websocket";
 import styles from "Room.module.css";
 import { Settings } from "./Settings";
 import notificationOgg from "./notification.ogg";
@@ -48,21 +49,26 @@ export function Room(props: routeProps & ownProps) {
   const [myParticipantId, setMyParticipantId] = useState<ParticipantId | null>(
     null
   );
-  const [room, setRoomState] = useState<RoomState>({
-    participants: [],
-    raisedHands: [],
-  });
-  const socket = useRef<WebSocket | null>(null);
+  const [room, setRoomState] = useState<RoomState | "UNKNOWN">("UNKNOWN");
+  const socket = useRef<ReconnectingWebSocket | null>(null);
   useEffect(() => {
-    const ws = new WebSocket(
-      `${window.location.protocol === "https:" ? "wss" : "ws"}://${
-        window.location.host
-      }/api/rooms/${props.roomId}/ws`
-    );
+    const protocol = window.location.protocol === "https:" ? "wss" : "ws";
+    const url = `${protocol}://${window.location.host}/api/rooms/${props.roomId}/ws`;
+    const ws = new ReconnectingWebSocket(url);
     socket.current = ws;
 
     ws.onopen = (msg) => {
+      console.log("Websocket connected");
       ws.send(JSON.stringify({ type: "SET_NAME", name: props.userName }));
+    };
+
+    ws.onclose = () => {
+      setRoomState("UNKNOWN");
+      console.log("Websocket closed");
+    };
+
+    ws.onerror = (error) => {
+      console.log("Websocket error", error);
     };
 
     return () => {
@@ -91,7 +97,7 @@ export function Room(props: routeProps & ownProps) {
             break;
           case "ROOM_STATE_UPDATED":
             console.log("Updating room state", data.room);
-            if (wasNewHandRaised(room, data.room)) {
+            if (room === "UNKNOWN" || wasNewHandRaised(room, data.room)) {
               notificationAudio
                 .play()
                 .catch((e) =>
@@ -107,11 +113,12 @@ export function Room(props: routeProps & ownProps) {
     };
   }, [room, setRoomState]);
 
-  if (!myParticipantId) return <div>Connecting</div>;
-  const myHandIsRaised = room.raisedHands.includes(myParticipantId);
+  const myHandIsRaised =
+    !myParticipantId || room === "UNKNOWN"
+      ? false
+      : room.raisedHands.includes(myParticipantId);
+  const hasRaisedHands = room !== "UNKNOWN" && room.raisedHands.length > 0;
 
-  const hasRaisedHands = room.raisedHands.length > 0;
-  console.log({ hasRaisedHands, raisedHands: room.raisedHands });
   return (
     <div className={styles.wrapper}>
       <Settings
@@ -130,10 +137,16 @@ export function Room(props: routeProps & ownProps) {
         }}
       />
       <header>
-        <h1 title={room.participants.map((p) => p.name).join(", ")}>
+        <h1
+          title={
+            room === "UNKNOWN"
+              ? "connecting…"
+              : room.participants.map((p) => p.name).join(", ")
+          }
+        >
           #{props.roomId}
           {"{"}
-          {room.participants.length}
+          {room === "UNKNOWN" ? "?" : room.participants.length}
           {"}"}
         </h1>
         <button
@@ -155,7 +168,7 @@ export function Room(props: routeProps & ownProps) {
             </span>
           </div>
           <div className={styles.speakerList}>
-            {hasRaisedHands && (
+            {room !== "UNKNOWN" && hasRaisedHands && (
               <ol>
                 {room.raisedHands
                   .flatMap((participantId) => {
